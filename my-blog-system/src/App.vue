@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-view/>
   </div>
 </template>
 
@@ -10,8 +9,16 @@ import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'app',
-  components: {
-    HelloWorld
+  mounted () {
+    this.$http.post(process.webServerHost + '/api/auth/current')
+      .then(res => {
+        const {data} = res
+        this.$store.commit('SET_USER', data)
+      })
+      .catch(err => {
+        console.error(err)
+        this.$store.commit('SET_USER', null)
+      })
   }
 }
 </script>
